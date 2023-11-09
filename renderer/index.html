@@ -1,71 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-    http-equiv="Content-Security-Policy"
-    content="script-src 'self' 'unsafe-inline'"
-  />
-    <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
-    rel="stylesheet"
-  />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/renderer.js" defer></script>
-    <title>ImageResizer</title>
-  </head>
-  <body class="bg-teal-700">
-    <div
-      class="max-w-xl m-auto h-screen flex flex-col align-center justify-center"
-    >
-      <div class="flex flex-col w-full items-center justify-center bg-grey-lighter">
-        <label
-          class="w-64 flex flex-col items-center px-4 py-7 bg-white text-gray-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:text-teal-800"
-        >
-          <img src="./images/logo.svg" width="32" />
-          <span class="mt-2 leading-normal">Select an image to resize</span>
-          <input id="img" type="file" class="hidden" />
-        </label>
-      </div>
+  <title>ImageResizer</title>
+</head>
 
-      <!-- Form -->
-      <form id="img-form" class="hidden">
-        <div class="mt-6">
-          <label class="mt-1 block text-white text-center w-80 m-auto py-3 shadow-sm border-gray-300 rounded-md">Width</label>
-          <input
-            type="number"
-            name="width"
-            id="width"
-            class="mt-1 block w-80 m-auto p-3 shadow-sm border-gray-300 rounded-md"
-            placeholder="Width"
-          />
-        </div>
-
-        <div class="mt-4">
-          <label class="mt-1 block text-white text-center w-80 m-auto py-3 shadow-sm border-gray-300 rounded-md">Height</label>
-          <input
-            type="number"
-            name="height"
-            id="height"
-            class="mt-1 block w-80 m-auto p-3 shadow-sm border-gray-300 rounded-md"
-            placeholder="Height"
-          />
-        </div>
-
-        <!-- Button -->
-        <div class="mt-6">
-          <button
-            type="submit"
-            class="w-80 m-auto flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Resize
-          </button>
-
-      </form>
-
+<body class="bg-teal-700">
+  
+  <div class="max-w-xl m-auto h-screen flex flex-col align-center justify-center">
+    <div class="flex flex-col w-full items-center justify-center bg-grey-lighter">
+      <label
+        class="w-64 flex flex-col items-center px-4 py-7 bg-white text-gray-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:text-teal-800">
+        <img src="./images/logo.svg" width="64" />
+        <span class="mt-2 leading-normal">Select an image to resize</span>
+        <input id="img" type="file" class="hidden" />
+      </label>
       <p class="text-white text-lg text-center font-mono mt-6"><strong>File: </strong><span id="filename"></span></p>
-      <p class="text-white text-lg text-center font-mono mt-2"><strong>Output: </strong><span id="output-path"></span></p>
+      <label class="text-white text-lg text-center font-mono mt-1">With: <span id="width"></span></label>
+      <label class="text-white text-lg text-center font-mono mt-1">Height: <span id="height"></span></label>
     </div>
-  </body>
+
+    <!-- Form -->
+    <form id="img-form" class="text-white text-center font-mono text-lg mt-6 hidden">
+      <!-- Select -->
+
+      <div class="select-brand">
+        <div class="ios-logo">
+          <h3>iOS</h3>  
+          <div class="appstore-icon">
+            <input type="checkbox" value="appstore-icon" id="appstore-icon">
+            <label for="appstore-icon"> App Store Icon (1024x1024) </label>
+          </div> 
+          <div class="app-icon">
+            <input type="checkbox" value="app-icon" id="app-icon">
+            <label for="app-icon"> App Icon (180x180) </label>
+          </div> 
+        </div>
+    
+      <div id="android-logo">
+        <h3>ANDROID</h3>
+
+        <div class="mipmap-mdpi">
+          <h4>mipmap-mdpi (48x48)</h4>
+          <div class="selection">
+            <div class="normal">
+              <input type="checkbox" id="mdpi-normal" name="mdpi-normal" value="mdpi-normal">
+              <label for="mdpi-normal"> normal</label>
+            </div>
+
+            <div class="rounded">
+              <input type="checkbox" id="mdpi-rounded" name="mdpi-rounded" value="mdpi-rounded">
+              <label for="mdpi-rounded"> rounded</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mipmap-hdpi">
+          <h4>mipmap-hdpi (72x72)</h4>
+          <div class="selection">
+            <div class="normal">
+              <input type="checkbox" id="hdpi-normal" name="hdpi-normal" value="hdpi-normal">
+              <label for="hdpi-normal"> normal</label>
+            </div>
+
+            <div class="rounded">
+              <input type="checkbox" id="hdpi-rounded" name="hdpi-rounded" value="hdpi-rounded">
+              <label for="hdpi-rounded"> rounded</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mipmap-xhdpi">
+          <h4>mipmap-xhdpi (96x96)</h4>
+          <div class="selection">
+            <div class="normal">
+              <input type="checkbox" id="xhdpi-normal" name="xhdpi-normal" value="xhdpi-normal">
+              <label for="xhdpi-normal"> normal</label>
+            </div>
+
+            <div class="rounded">
+              <input type="checkbox" id="xhdpi-rounded" name="xhdpi-rounded" value="xhdpi-rounded">
+              <label for="xhdpi-rounded"> rounded</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mipmap-xxhdpi">
+          <h4>mipmap-xxhdpi (144x144)</h4>
+          <div class="selection">
+            <div class="normal">
+              <input type="checkbox" id="xxhdpi-normal" name="xxhdpi-normal" value="xxhdpi-normal">
+              <label for="xxhdpi-normal"> normal</label>
+            </div>
+
+            <div class="rounded">
+              <input type="checkbox" id="xxhdpi-rounded" name="xxhdpi-rounded" value="xxhdpi-rounded">
+              <label for="xxhdpi-rounded"> rounded</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mipmap-xxxhdpi">
+          <h4>mipmap-xxxhdpi (192x192)</h4>
+          <div class="selection">
+            <div class="normal">
+              <input type="checkbox" id="xxxhdpi-normal" name="xxxhdpi-normal" value="xxxhdpi-normal">
+              <label for="xxxhdpi-normal"> normal</label>
+            </div>
+
+            <div class="rounded">
+              <input type="checkbox" id="xxxhdpi-rounded" name="xxxhdpi-rounded" value="xxxhdpi-rounded">
+              <label for="xxxhdpi-rounded"> rounded</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <!-- Button -->
+      <div class="mt-6">
+        <button type="submit"
+          class="w-80 m-auto flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-500 hover:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Resize
+        </button>
+
+    </form>
+
+  
+    <p class="text-white text-lg text-center font-mono mt-2"><strong>Output: </strong><span id="output-path"></span></p>
+  </div>
+
+  <style>
+    .select-brand{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+    .selection {
+      display: flex;
+      width: 300px;
+      justify-content: space-around;
+
+    }
+  </style>
+</body>
+
 </html>

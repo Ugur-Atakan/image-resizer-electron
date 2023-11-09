@@ -5,6 +5,23 @@ const filename = document.querySelector('#filename');
 const heightInput = document.querySelector('#height');
 const widthInput = document.querySelector('#width');
 
+// iOS Logo İçin
+const appStoreIconCheckbox = document.querySelector('#appstore-icon');
+const appIconCheckbox = document.querySelector('#app-icon');
+
+// Android Logo İçin
+const mdpiNormalCheckbox = document.querySelector('#mdpi-normal');
+const mdpiRoundedCheckbox = document.querySelector('#mdpi-rounded');
+const hdpiNormalCheckbox = document.querySelector('#hdpi-normal');
+const hdpiRoundedCheckbox = document.querySelector('#hdpi-rounded');
+const xhdpiNormalCheckbox = document.querySelector('#xhdpi-normal');
+const xhdpiRoundedCheckbox = document.querySelector('#xhdpi-rounded');
+const xxhdpiNormalCheckbox = document.querySelector('#xxhdpi-normal');
+const xxhdpiRoundedCheckbox = document.querySelector('#xxhdpi-rounded');
+const xxxhdpiNormalCheckbox = document.querySelector('#xxxhdpi-normal');
+const xxxhdpiRoundedCheckbox = document.querySelector('#xxxhdpi-rounded');
+
+
 // Load image and show form
 function loadImage(e) {
   const file = e.target.files[0];
@@ -19,8 +36,8 @@ function loadImage(e) {
   const image = new Image();
   image.src = URL.createObjectURL(file);
   image.onload = function () {
-    widthInput.value = this.width;
-    heightInput.value = this.height;
+    widthInput.innerHTML = this.width;
+    heightInput.innerHTML = this.height;
   };
 
   // Show form, image name and output path
@@ -31,13 +48,17 @@ function loadImage(e) {
 
 // Make sure file is an image
 function isFileImage(file) {
-  const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+  const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/jpg', 'image/png'];
   return file && acceptedImageTypes.includes(file['type']);
 }
 
 // Resize image
 function resizeImage(e) {
   e.preventDefault();
+
+  const selectedOptions = [];
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+  checkboxes.forEach((checkbox)=>{selectedOptions.push(checkbox.value)});
 
   if (!img.files[0]) {
     alertError('Please upload an image');
@@ -48,16 +69,11 @@ function resizeImage(e) {
     alertError('Please enter a width and height');
     return;
   }
-
-  // Electron adds a bunch of extra properties to the file object including the path
   const imgPath = img.files[0].path;
-  const width = widthInput.value;
-  const height = heightInput.value;
-
+  
   ipcRenderer.send('image:resize', {
     imgPath,
-    height,
-    width,
+    selectedOptions,
   });
 }
 
@@ -96,3 +112,16 @@ function alertError(message) {
 img.addEventListener('change', loadImage);
 // Form submit listener
 form.addEventListener('submit', resizeImage);
+
+
+
+
+
+// function selectedOptions(){
+//   const selectedOptions = [];
+//   const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+//   checkboxes.forEach(function(checkbox) {
+//     selectedOptions.push(checkbox.value);
+//   });
+//   console.log('Seçili seçenekler:', selectedOptions);
+// }
