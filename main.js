@@ -107,11 +107,22 @@ ipcMain.on('image:resize', async (e, options) => {
   const selectedItems = options?.selectedOptions;
   const imgPath = options?.imgPath;
 
+  await imageresizer(selectedItems,imgPath,dest).then(()=>{
+    mainWindow.webContents.send('image:done','İşlem Tamamlandı');
+    shell.openPath(dest);
+  }).catch((err)=>{
+    console.error('error:', err);
+  }
+  );
+});
+
+async function imageresizer(selectedItems,imgPath,dest){
   for (const item of selectedItems) {
-    const { height, width, fileName } = getDimensionsForItem(item);
+    const { height, width, fileName,dirName } = getDimensionsForItem(item);
 
     if (imgPath && height && width && fileName) {
-      const options = { imgPath, height, width, dest: path.join(dest, item) };
+      const options = { imgPath, height, width, dest: path.join(dest, dirName) };
+
       try {
         const newPath = await resizeImg(fs.readFileSync(imgPath), {
           width: +width,
@@ -121,43 +132,39 @@ ipcMain.on('image:resize', async (e, options) => {
           fs.mkdirSync(options.dest, { recursive: true });
         }
         fs.writeFileSync(path.join(options.dest, fileName + '.png'), newPath);
-
-        mainWindow.webContents.send('image:done', { item });
       } catch (err) {
         console.error('Resizing error:', err);
       }
     }
   }
-  shell.openPath(options.dest);
-});
+}
 
 function getDimensionsForItem(item) {
   switch (item) {
-
     case 'mdpi-normal':
-      return { imgPath: 'mipmap-mdpi', height: 48, width: 48, fileName: 'ic_launcher' };
+      return { dirName: 'mipmap-mdpi', height: 48, width: 48, fileName: 'ic_launcher' };
     case 'mdpi-rounded':
-      return { imgPath: 'mipmap-mdpi', height: 48, width: 48, fileName: 'ic_launcher_round' };
+      return { dirName: 'mipmap-mdpi', height: 48, width: 48, fileName: 'ic_launcher_round' };
     case 'hdpi-normal':
-      return { imgPath: 'mipmap-hdpi', height: 72, width: 72, fileName: 'ic_launcher' };
+      return { dirName: 'mipmap-hdpi', height: 72, width: 72, fileName: 'ic_launcher' };
     case 'hdpi-rounded':
-      return { imgPath: 'mipmap-hdpi', height: 72, width: 72, fileName: 'ic_launcher_round' };
+      return { dirName: 'mipmap-hdpi', height: 72, width: 72, fileName: 'ic_launcher_round' };
     case 'xhdpi-normal':
-      return { imgPath: 'mipmap-xhdpi', height: 96, width: 96, fileName: 'ic_launcher' };
+      return { dirName: 'mipmap-xhdpi', height: 96, width: 96, fileName: 'ic_launcher' };
     case 'xhdpi-rounded':
-      return { imgPath: 'mipmap-xhdpi', height: 96, width: 96, fileName: 'ic_launcher_round' };
+      return { dirName: 'mipmap-xhdpi', height: 96, width: 96, fileName: 'ic_launcher_round' };
     case 'xxhdpi-normal':
-      return { imgPath: 'mipmap-xxhdpi', height: 144, width: 144, fileName: 'ic_launcher' };
+      return { dirName: 'mipmap-xxhdpi', height: 144, width: 144, fileName: 'ic_launcher' };
     case 'xxhdpi-rounded':
-      return { imgPath: 'mipmap-xxhdpi', height: 144, width: 144, fileName: 'ic_launcher_round' };
+      return { dirName: 'mipmap-xxhdpi', height: 144, width: 144, fileName: 'ic_launcher_round' };
     case 'xxxhdpi-normal':
-      return { imgPath: 'mipmap-xxxhdpi', height: 192, width: 192, fileName: 'ic_launcher' };
+      return { dirName: 'mipmap-xxxhdpi', height: 192, width: 192, fileName: 'ic_launcher' };
     case 'xxxhdpi-rounded':
-      return { imgPath: 'mipmap-xxxhdpi', height: 192, width: 192, fileName: 'ic_launcher_round' };
+      return { dirName: 'mipmap-xxxhdpi', height: 192, width: 192, fileName: 'ic_launcher_round' };
     case 'appstore-icon':
-      return { imgPath: 'appstore-icon', height: 1024, width: 1024, fileName: 'appstore-icon' };
+      return { dirName: 'appstore-icon', height: 1024, width: 1024, fileName: 'appstore-icon' };
     case 'app-icon':
-      return { imgPath: 'app-icon', height: 180, width: 180, fileName: 'app-icon' };
+      return { dirName: 'app-icon', height: 180, width: 180, fileName: 'app-icon' };
     default:
       return {};
   }

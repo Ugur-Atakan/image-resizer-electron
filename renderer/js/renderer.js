@@ -79,7 +79,7 @@ function resizeImage(e) {
 
 // When done, show message
 ipcRenderer.on('image:done', () =>
-  alertSuccess(`Image resized to ${heightInput.value} x ${widthInput.value}`)
+  alertSuccess(`Image resized successfully and saved to output path `)
 );
 
 function alertSuccess(message) {
